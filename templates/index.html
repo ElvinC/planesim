@@ -1,8 +1,13 @@
-{% extends "layout.html" %}
-{% block title %} Plane {% endblock %}
+<!DOCTYPE html>
+<html>
+<head>
+	<link rel="stylesheet" type="text/css" href="{{url_for('static', filename='style.css')}}">
+    <script src="{{url_for('static', filename='lib/phaser.min.js')}}"></script>
+    <script src="{{url_for('static', filename='js/game.js')}}", type="module"></script>
+	<title>Plane</title>
+</head>
+<body>
+	
+</body>
+</html>
 
-{% block content %}
-<script src="{{
-    url_for('static', filename='js/game.js')
-}}"></script>
-{% endblock %}
