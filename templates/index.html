@@ -2,12 +2,14 @@
 <html>
 <head>
 	<link rel="stylesheet" type="text/css" href="{{url_for('static', filename='style.css')}}">
-    <script src="{{url_for('static', filename='lib/phaser.min.js')}}"></script>
-    <script src="{{url_for('static', filename='js/game.js')}}", type="module"></script>
+    <script src="{{url_for('static', filename='lib/jquery.min.js')}}"></script>
+    <script src="{{url_for('static', filename='lib/matter.js')}}"></script>
+    <script src="{{url_for('static', filename='lib/pixi.min.js')}}"></script>
+    <script src="{{url_for('static', filename='js/gametest.js')}}" type="module"></script>
 	<title>Plane</title>
 </head>
 <body>
-	
+	<div id="HUD">Speed: <span id="speed"></span></div>
 </body>
 </html>
 

@@ -67,3 +67,12 @@ html, body {
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
     padding-bottom: 400px;
 }
+
+#HUD {
+    position: fixed;
+    left: 0;
+    right: 0;
+    font-family: sans-serif;
+    font-size: 20px;
+    z-index: 100;
+}

@@ -1,5 +1,6 @@
-import * as jQuery from '../lib/jquery.min.js'
 import Plane from './plane/Plane.js'
+
+// Graphics = Phaser.GameObjects.Graphics
 
 var config = {
     type: Phaser.AUTO,
@@ -11,7 +12,6 @@ var config = {
         matter: {
             enableSleeping: false,
             gravity: {
-                scale: 0
             },
         }
     },
@@ -27,16 +27,30 @@ console.log(a.getMass())
 
 var game = new Phaser.Game(config)
 
+
 function preload () {
     this.load.image("ball", 'static/assets/sprites/ball.png');
 }
 
 function create() {
+/*
+    graphics = new Graphics(this)
+    graphics.lineStyle(5, 0xFF00FF, 1.0);
+    graphics.beginPath();
+    graphics.moveTo(100, 100);
+    graphics.lineTo(200, 200);
+    graphics.closePath();
+    graphics.strokePath();
 
-
+*/
 
     // matter js bounds
-
+    console.log(this)
+    window.game = this;
+    /*
+    this.matter.add.rectangle(400, 500, 800, 40, {isStatic: true, restitution: 0.2})
+    */
+    
     // background
     for (var i = 0; i < 4; i++) {
         const ball = this.matter.add.sprite(Math.random() * 800, Math.random() * 400, "ball")
@@ -48,7 +62,8 @@ function create() {
         ball.setFrictionAir(0.00);
     }
 
-    const floor = this.matter.add.rectangle(0, 0, 500, 200);
+    const floor = this.matter.add.rectangle(0, 600, 10000, 50, {isStatic: true, restitution: 0.2});
+
 
     const player = this.matter.add.sprite(Math.random() * 800, Math.random() * 400, "ball")
     
@@ -65,7 +80,7 @@ function create() {
     window.player = player;
 
     this.cursors = this.input.keyboard.createCursorKeys();
-
+/*
     var controlConfig = {
         camera: this.cameras.main,
         left: this.cursors.left,
@@ -78,12 +93,15 @@ function create() {
     };
 
     this.controls = new Phaser.Cameras.Controls.SmoothedKeyControl(controlConfig);
-    
+  */  
     window.cam = this.cameras.main;
+    
     
 }
 
 function update (time, delta) {
+    /*cam = this.cameras.main
+*/
 
     if (this.cursors.left.isDown)
     {
@@ -103,5 +121,4 @@ function update (time, delta) {
         player.thrustBack(0.1);
     }
 
-    this.controls.update(delta);
 }
