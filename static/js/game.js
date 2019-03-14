@@ -80,20 +80,6 @@ function create() {
     window.player = player;
 
     this.cursors = this.input.keyboard.createCursorKeys();
-/*
-    var controlConfig = {
-        camera: this.cameras.main,
-        left: this.cursors.left,
-        right: this.cursors.right,
-        up: this.cursors.up,
-        down: this.cursors.down,
-        acceleration: 0.06,
-        drag: 0.0005,
-        maxSpeed: 1.0
-    };
-
-    this.controls = new Phaser.Cameras.Controls.SmoothedKeyControl(controlConfig);
-  */  
     window.cam = this.cameras.main;
     
     

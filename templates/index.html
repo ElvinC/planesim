@@ -1,15 +1,25 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<link rel="stylesheet" type="text/css" href="{{url_for('static', filename='style.css')}}">
+	<!--<link rel="stylesheet" type="text/css" href="{{url_for('static', filename='style.css')}}">
     <script src="{{url_for('static', filename='lib/jquery.min.js')}}"></script>
     <script src="{{url_for('static', filename='lib/matter.js')}}"></script>
     <script src="{{url_for('static', filename='lib/pixi.min.js')}}"></script>
-    <script src="{{url_for('static', filename='js/gametest.js')}}" type="module"></script>
+    <script src="{{url_for('static', filename='js/gametest.js')}}" type="module"></script>-->
+    <link rel="stylesheet" type="text/css" href="../static/style.css">
+    <script src="../static/lib/jquery.min.js"></script>
+    <script src="../static/lib/matter.js"></script>
+    <script src="../static/lib/pixi.min.js"></script>
+    <script src="../static/js/gametest.js" type="module"></script>
 	<title>Plane</title>
 </head>
 <body>
-	<div id="HUD">Speed: <span id="speed"></span></div>
+    <div id="HUD">
+        Speed: <span id="speed"></span> <br>
+        Altitude: <span id="altitude"></span> <br>
+        Lift: <span id="lift"></span> <br>
+        VSpeed: <span id="vSpeed"></span> <br>
+    </div>
 </body>
 </html>
 

@@ -9,9 +9,11 @@ export default class Scene {
     constructor() {
         // object list
         this.physicalChildren = [];
+        this.customPhysicalChildren = [];
 
         // physics variables
         this.engine = Engine.create();
+        this.engine.world.gravity.scale = 1;
         this.bodies = [];
 
         // PIXI setup
@@ -53,6 +55,7 @@ export default class Scene {
         this.camera = new Camera(this.renderer);
 
         window.cam = (this.camera)
+        this.camera.setZoom(8)
         this.camera.addChild(this.stage)
         window.world = this.engine
     }
@@ -74,6 +77,12 @@ export default class Scene {
         World.add(this.engine.world, [child.body]);
     }
 
+    addCustomPhysicalChild(child) {
+        // add visual sprite
+        this.stage.addChild(child.sprite);
+        this.customPhysicalChildren.push(child)
+    }
+
     run() {
         Engine.run(this.engine)
     }
@@ -81,6 +90,9 @@ export default class Scene {
     update() {
         for (var body in this.physicalChildren) {
             this.physicalChildren[body].update();
+        }
+        for (var body in this.customPhysicalChildren) {
+            this.customPhysicalChildren[body].update();
         }
 
     }
