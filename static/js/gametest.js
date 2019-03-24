@@ -94,23 +94,23 @@ class Plane {
             this.body.force = Vector.add(this.body.force, Vector.unit(this.body.angle, 0.1))
         }
         if (this.keys[37]) {
-            this.body.torque = -2;
+            this.body.torque = -1;
         }
         if (this.keys[39]) {
-            this.body.torque = 2;
+            this.body.torque = 1;
         }
         
         // LIFT
         
-        // const velUnit = Vector.normalise(this.body.velocity);
+        const velUnit = Vector.normalise(this.body.velocity);
         const Cl = 0.00001 * Math.sin(-this.body.angle + 0.2);
         const speedSquared = Math.pow(this.body.speed, 2);
         $("#speed").html(Math.round(this.body.speed))
         const liftMag = Cl * speedSquared 
-        const lift = Vector.mult(Vector.rotate(Vector.unit(this.body.angle), -Math.PI/2), liftMag)
+        const lift = Vector.mult(Vector.rotate(velUnit, -Math.PI/2), liftMag)
         
-        const Cd = 0.000001;
-        const drag = Vector.mult(Vector.neg(Vector.unit(this.body.angle)), Cd * speedSquared)
+        const Cd = 0.000001 * Math.abs(Math.sin(this.body.angle));
+        const drag = Vector.mult(Vector.neg(velUnit), Cd * speedSquared)
 
         const aero = Vector.add(lift, drag);
         
@@ -140,13 +140,13 @@ function setup() {
     floorSprite.drawRect(0 - 50000, 500 - 25, 100000, 50);
     floorSprite.endFill();
     scene.addChild(floorSprite)
-
+/*
     for (var i = 0; i< 4; i++) {
         var test = new PhysicalBall(Math.random()*500, Math.random()*500, 50);
 
         scene.addPhysicalChild(test);
     }
-
+*/
     for (var i = 0; i < 40; i++) {
         var text = new PIXI.Text(`Distance: ${i * 1000}`, {fontFamily : 'Arial', fontSize: 24, fill : 0xff1010, align : 'center'})
         text.position.x = i * 1000;
@@ -166,7 +166,7 @@ function setup() {
 function render() {
     scene.render()
     scene.update()
-    scene.camera.setPos(-plane.body.position.x, 0)
+    scene.camera.setPos(-plane.body.position.x,plane.body.position.y)
 
     requestAnimationFrame(render);
 }
