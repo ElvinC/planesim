@@ -1,4 +1,5 @@
 import { Vec2, Vector } from "./Vec2.js";
+import GraphicsVector from "../scene/GraphicsVector.js";
 
 
 class physicalObject {
@@ -64,20 +65,26 @@ export default class CustomPlane {
         this.spriteImg.height = 24;
         this.sprite.addChild(this.spriteImg)
 
-        this.speedVec = new PIXI.Graphics();
-        this.speedVec.lineStyle(0.2, 0xff0000, 1);
-        this.speedVec.moveTo(0, 0);
-        this.speedVec.lineTo(4, 7);
-        this.sprite.addChild(this.speedVec)
-
-
         this.keys = keys
 
         this.body = new physicalObject(x, y, 65000)
+
+        this.speedVec = new GraphicsVector(this.body.vel, 0.2);
+        this.sprite.addChild(this.speedVec)
+
+        // thrust
+        this.thrust = 0
+        this.minThrust = 0;
+        this.maxThrust = 300000;
     }
     update() {
         if (this.keys[38]) {
-            this.body.addForce(Vector.unit(this.body.angle, 300000))
+            this.thrust += this.maxThrust / 100;
+            this.thrust = Math.max(Math.min(this.thrust, this.maxThrust), this.minThrust)
+        }
+        if (this.keys[40]) {
+            this.thrust -= this.maxThrust / 100;
+            this.thrust = Math.max(Math.min(this.thrust, this.maxThrust), this.minThrust)
         }
         if (this.keys[37]) {
             this.body.addTorque(-10)
@@ -85,13 +92,13 @@ export default class CustomPlane {
         if (this.keys[39]) {
             this.body.addTorque(10)
         }
+        $("#thrust").html(Math.round(this.thrust))
+
+        // thrust
+        this.body.addForce(Vector.unit(this.body.angle, this.thrust))
 
         // update vector
-        this.speedVec.clear()
-        this.speedVec.lineStyle(0.2, 0xff0000, 1)
-        this.speedVec.moveTo(0, 0);
-        this.speedVec.lineTo(this.body.vel.x * 0.2, this.body.vel.y * 0.2);
-        
+        this.speedVec.update(this.body.vel)
 
         
         if (this.body.pos.x > 1000) {
@@ -103,7 +110,18 @@ export default class CustomPlane {
             this.body.vel.y = -this.body.vel.y * 0.2
             this.body.pos.y = 475
         }
-        
+
+        const angleUnit = Vector.unit(this.body.angle)
+        if (this.body.pos.add(angleUnit.multiply(20)).y > 475) {
+            this.body.vel.y = -Math.abs(this.body.vel.y) * 0.2
+            this.body.pos.y -= this.body.pos.add(angleUnit.multiply(20)).y - 475
+            this.body.addTorque(-400 * Math.sin(this.body.angle))
+        }
+        if (this.body.pos.add(angleUnit.multiply(-20)).y > 475) {
+            this.body.vel.y = -Math.abs(this.body.vel.y) * 0.2
+            this.body.pos.y -= this.body.pos.add(angleUnit.multiply(-20)).y - 475
+            this.body.addTorque(-400 * Math.sin(this.body.angle))
+        }
         
 
         const velUnit = this.body.vel.unit()
@@ -126,6 +144,7 @@ export default class CustomPlane {
         const drag = velUnit.multiply(-1 * dragMag)
         this.body.addForce(drag)
 
+        $("#acc").html(this.body.acc.length())
 
         // turn towards moving direction
         this.body.addTorque(-AoA * speed * 0.1)
