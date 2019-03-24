@@ -1,5 +1,6 @@
 import { Vec2, Vector } from "./Vec2.js";
 import GraphicsVector from "../scene/GraphicsVector.js";
+import { ISA } from "../Physics/atmosphere.js";
 
 
 class physicalObject {
@@ -53,7 +54,6 @@ class physicalObject {
 
 export default class CustomPlane {
     constructor(x, y, keys) {
-        console.log("WAT")
         // var texture = PIXI.Texture.fromImage('static/assets/sprites/A220.png');
         var texture = PIXI.Texture.fromImage('../static/assets/sprites/A220.png')
         this.sprite = new PIXI.Container();
@@ -72,10 +72,18 @@ export default class CustomPlane {
         this.speedVec = new GraphicsVector(this.body.vel, 0.2);
         this.sprite.addChild(this.speedVec)
 
+        this.aeroVec = new GraphicsVector(this.body.vel, 0.00005, 0x0000ff);
+        this.sprite.addChild(this.aeroVec)
+
         // thrust
         this.thrust = 0
         this.minThrust = 0;
         this.maxThrust = 300000;
+
+        // flap
+        this.flap = 0;
+        this.minFlap = -0.5;
+        this.maxFlap = 0.5;
     }
     update() {
         if (this.keys[38]) {
@@ -87,10 +95,14 @@ export default class CustomPlane {
             this.thrust = Math.max(Math.min(this.thrust, this.maxThrust), this.minThrust)
         }
         if (this.keys[37]) {
-            this.body.addTorque(-10)
+            // this.body.addTorque(-10)
+            this.flap += this.maxFlap / 30;
+            this.flap = Math.max(Math.min(this.flap, this.maxFlap), this.minFlap)
         }
         if (this.keys[39]) {
-            this.body.addTorque(10)
+            this.flap -= this.maxFlap / 30;
+            this.flap = Math.max(Math.min(this.flap, this.maxFlap), this.minFlap)
+            // this.body.addTorque(10)
         }
         $("#thrust").html(Math.round(this.thrust))
 
@@ -105,49 +117,65 @@ export default class CustomPlane {
             this.body.pos.x = 0
         }
 
+        const floor = 0
+
         // bounce on floor
-        if (this.body.pos.y > 475) {
+        if (this.body.pos.y > floor) {
             this.body.vel.y = -this.body.vel.y * 0.2
-            this.body.pos.y = 475
+            this.body.pos.y = floor
         }
 
         const angleUnit = Vector.unit(this.body.angle)
-        if (this.body.pos.add(angleUnit.multiply(20)).y > 475) {
+        if (this.body.pos.add(angleUnit.multiply(20)).y > floor) {
             this.body.vel.y = -Math.abs(this.body.vel.y) * 0.2
-            this.body.pos.y -= this.body.pos.add(angleUnit.multiply(20)).y - 475
+            this.body.pos.y -= this.body.pos.add(angleUnit.multiply(20)).y - floor
             this.body.addTorque(-400 * Math.sin(this.body.angle))
         }
-        if (this.body.pos.add(angleUnit.multiply(-20)).y > 475) {
+        if (this.body.pos.add(angleUnit.multiply(-20)).y > floor) {
             this.body.vel.y = -Math.abs(this.body.vel.y) * 0.2
-            this.body.pos.y -= this.body.pos.add(angleUnit.multiply(-20)).y - 475
+            this.body.pos.y -= this.body.pos.add(angleUnit.multiply(-20)).y - floor
             this.body.addTorque(-400 * Math.sin(this.body.angle))
         }
         
 
         const velUnit = this.body.vel.unit()
         const velAngle = velUnit.angle()
-        const AoA = this.body.angle - velAngle
+        const AoA = -Math.acos( Vector.dot(velUnit, Vector.unit(this.body.angle)) ) * Math.sign(Vector.perp(velUnit, Vector.unit(this.body.angle)))
+        const altitude = -this.body.pos.y;
+        
 
-        const Cl = 1 * Math.sin(-AoA + 0.1);
+        const density = ISA(altitude).density;
+
+        const Cl = 1 * Math.sin(AoA + this.flap + 0.1);
         const speedSquared = this.body.vel.lengthSquared()
         const speed = this.body.vel.length()
+
+        const dynPressure = 0.5 * density * speedSquared
+
         $("#speed").html(Math.round(speed))
         $("#vSpeed").html(Math.round(-this.body.vel.y));
         $("#altitude").html(-Math.round(this.body.pos.y) + ", " + -Math.round(this.body.pos.x))
-        const liftMag = Math.min(Math.max(Cl * speedSquared * 1.3 * 0.5 * 120, -100000000), 100000000) 
+        $("#elevator").html(Math.round(this.flap * 100)/100)
+        const liftMag = Math.min(Math.max(Cl * dynPressure * 120, -100000000), 100000000) 
         $("#lift").html((liftMag))
         const lift = (new Vec2(velUnit.y, -velUnit.x)).multiply(liftMag)
         this.body.addForce(lift)
 
-        const Cd = 0.3 * Math.sin(-AoA + 0.1);
-        const dragMag = Math.abs(Math.min(Cd * speedSquared * 1.3 * 0.5 * 120, 100000000)) 
+        this.aeroVec.update(lift)
+
+        const Cd = 0.3 * Math.sin(AoA + this.flap + 0.1);
+        const dragMag = Math.abs(Math.min(Cd * dynPressure * 120, 100000000)) 
         const drag = velUnit.multiply(-1 * dragMag)
         this.body.addForce(drag)
 
         $("#acc").html(this.body.acc.length())
 
         // turn towards moving direction
-        this.body.addTorque(-AoA * speed * 0.1)
+        this.body.addTorque(AoA * speed * 0.1)
+
+        this.body.addTorque(-this.flap * 5)
+
+
         // gravity
         this.body.addForce(new Vec2(0, 9.81 * this.body.mass))
 

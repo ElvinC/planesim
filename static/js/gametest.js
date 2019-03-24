@@ -74,7 +74,7 @@ function setup() {
     
     var floorSprite = new PIXI.Graphics();
     floorSprite.beginFill(0x1e824c);
-    floorSprite.drawRect(0 - 50000, 500 - 25, 100000, 50);
+    floorSprite.drawRect(0 - 50000, 0, 100000, 50);
     floorSprite.endFill();
     scene.addChild(floorSprite)
 
@@ -93,7 +93,7 @@ function setup() {
     for (var i = 0; i < 40; i++) {
         var text = new PIXI.Text(`Distance: ${i * 100}`, {fontFamily : 'Arial', fontSize: 10, fill : 0xff1010, align : 'center'})
         text.position.x = i * 100;
-        text.position.y = 400;
+        text.position.y = -100;
         scene.addChild(text)
     }
 
