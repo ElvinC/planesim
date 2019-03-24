@@ -42,7 +42,7 @@ html, body {
 }
 
 #main-container .viewer {
-    background-color: red;
+    background-color: #ff9988;
     flex: 1;
 }
 
