@@ -20,6 +20,7 @@ var stageObjects = []
 
 var scene;
 
+var instruments;
 
 function SpriteObjects(x, y, radius) {
     var sprite = new PIXI.Graphics();
@@ -64,7 +65,27 @@ class PhysicalRect {
 }
 
 $(document).ready(() => {
-    // Matter.js setup
+    // Flight instruments setup
+    var options = {
+        size : 200,				// Sets the size in pixels of the indicator (square)
+        roll : 0,				// Roll angle in degrees for an attitude indicator
+        pitch : 400,				// Pitch angle in degrees for an attitude indicator
+        heading: 0,				// Heading angle in degrees for an heading indicator
+        vario: 0,				// Variometer in 1000 feets/min for the variometer indicator
+        airspeed: 0,			// Air speed in knots for an air speed indicator
+        altitude: 0,			// Altitude in feets for an altimeter indicator
+        pressure: 1000,			// Pressure in hPa for an altimeter indicator
+        showBox : false,			// Sets if the outer squared box is visible or not (true or false)
+        img_directory : '../static/img/'	// The directory where the images are saved to
+    }
+
+    instruments = {
+        attitude: $.flightIndicator('#attitude', 'attitude', options),
+        heading: $.flightIndicator('#heading', 'heading', options),
+        variometer: $.flightIndicator('#variometer', 'variometer', options),
+        airspeed: $.flightIndicator('#airspeed', 'airspeed', options),
+        altimeter: $.flightIndicator('#altimeter', 'altimeter', options),
+    }
 
     scene = new Scene();
     setup()
@@ -97,7 +118,7 @@ function setup() {
         scene.addChild(text)
     }
 
-    var pla = new CustomPlane(0, 0, scene.keys)
+    var pla = new CustomPlane(0, 0, scene.keys, instruments = instruments)
     console.log(pla)
 
     window.plane = pla;

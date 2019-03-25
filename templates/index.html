@@ -8,6 +8,8 @@
     <script src="{{url_for('static', filename='js/gametest.js')}}" type="module"></script>-->
     <link rel="stylesheet" type="text/css" href="../static/style.css">
     <script src="../static/lib/jquery.min.js"></script>
+    <script src="../static/lib/jquery.flightindicators.js"></script>
+    <link rel="stylesheet" type="text/css" href="../static/css/flightindicators.min.css">
     <script src="../static/lib/matter.js"></script>
     <script src="../static/lib/pixi.min.js"></script>
     <script src="../static/js/gametest.js" type="module"></script>
@@ -22,6 +24,14 @@
         Acc: <span id="acc"></span> <br>
         Thrust: <span id="thrust"></span> <br>
         Elevator: <span id="elevator"></span>
+        
+    </div>
+    <div id="instruments">
+        <span id="attitude"></span>
+        <span id="heading"></span>
+        <span id="variometer"></span>
+        <span id="airspeed"></span>
+        <span id="altimeter"></span>
     </div>
 </body>
 </html>

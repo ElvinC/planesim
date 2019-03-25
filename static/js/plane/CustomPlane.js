@@ -33,7 +33,7 @@ class physicalObject {
 
     update(dt) {
         const newAcc = this.force.divide(this.mass);
-        this.acc = newAcc
+        this.acc = newAcc;
 
         this.pos.addInPlace( Vector.add(this.vel.multiply(dt), newAcc.multiply(0.5 * Math.pow(dt,2))) )
 
@@ -56,7 +56,7 @@ class physicalObject {
 }
 
 export default class CustomPlane {
-    constructor(x, y, keys) {
+    constructor(x, y, keys, instruments) {
         // var texture = PIXI.Texture.fromImage('static/assets/sprites/A220.png');
         var texture = PIXI.Texture.fromImage('../static/assets/sprites/A220.png')
         this.sprite = new PIXI.Container();
@@ -69,6 +69,13 @@ export default class CustomPlane {
         this.sprite.addChild(this.spriteImg)
 
         this.keys = keys
+
+        if (instruments) {
+            this.instruments = instruments;
+            this.hasInstruments = true;
+        } else {
+            this.hasInstruments = false;
+        }
 
         this.body = new physicalObject(x, y, 65000)
 
@@ -146,8 +153,9 @@ export default class CustomPlane {
         const AoA = -Math.acos( Vector.dot(velUnit, Vector.unit(this.body.angle)) ) * Math.sign(Vector.perp(velUnit, Vector.unit(this.body.angle)))
         const altitude = -this.body.pos.y;
         
+        const atmos = ISA(altitude)
 
-        const density = ISA(altitude).density;
+        const density = atmos.density;
 
         const Cl = 1 * Math.sin(AoA + this.flap + 0.1);
         const speedSquared = this.body.vel.lengthSquared()
@@ -155,7 +163,7 @@ export default class CustomPlane {
 
         const dynPressure = 0.5 * density * speedSquared
 
-        $("#speed").html(Math.round(speed))
+        $("#speed").html(Math.round(speed*1.944))
         $("#vSpeed").html(Math.round(-this.body.vel.y));
         $("#altitude").html(-Math.round(this.body.pos.y) + ", " + -Math.round(this.body.pos.x))
         $("#elevator").html(Math.round(this.flap * 100)/100)
@@ -187,6 +195,24 @@ export default class CustomPlane {
         
         this.sprite.position = this.body.getPosition();
         this.spriteImg.rotation = this.body.angle;
+
+        function radToDeg(rad) {
+            return rad * 180 / Math.PI
+        }
+
+        if (this.hasInstruments) {
+            this.instruments.attitude.setPitch(radToDeg(-this.body.angle));
+            // convert to 1000 ft/min
+            const vSpeed = this.body.pos.y < -0.4 ? -this.body.vel.y / 5.08 : 0 
+
+            this.instruments.variometer.setVario(vSpeed);
+
+            
+
+            this.instruments.airspeed.setAirSpeed(speed * 1.944);
+            this.instruments.altimeter.setAltitude(altitude);
+            this.instruments.altimeter.setPressure(atmos.pressure / 100);
+        }
         
     }
 }
