@@ -1,8 +1,9 @@
 export default class GraphicsVector extends PIXI.Graphics {
-    constructor(vec, scaling = 1) {
+    constructor(vec, scaling = 1, color=0xff0000) {
         super();
         this.scaling = scaling;
-        this.lineStyle(0.2, 0xff0000, 1);
+        this.color = color;
+        this.lineStyle(0.2, this.color, 1);
 
         this.moveTo(0, 0)
         this.lineTo(vec.x * this.scaling, vec.y * this.scaling)
@@ -10,7 +11,7 @@ export default class GraphicsVector extends PIXI.Graphics {
 
     update(vec) {
         this.clear()
-        this.lineStyle(0.2, 0xff0000, 1)
+        this.lineStyle(0.2, this.color, 1)
         this.moveTo(0, 0);
         this.lineTo(vec.x * this.scaling, vec.y * this.scaling)
     }
