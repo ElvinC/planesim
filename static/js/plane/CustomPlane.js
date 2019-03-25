@@ -31,9 +31,12 @@ class physicalObject {
     }
 
     update(dt) {
-        this.acc = this.force.divide(this.mass);
-        this.vel.addInPlace(this.acc.multiply(dt));
-        this.pos.addInPlace(this.vel.multiply(dt))
+        const newAcc = this.force.divide(this.mass);
+        this.acc = newAcc
+
+        this.pos.addInPlace( Vector.add(this.vel.multiply(dt), newAcc.multiply(0.5 * Math.pow(dt,2))) )
+
+        this.vel.addInPlace(newAcc.multiply(dt));
 
         // reset force
         this.force.x = 0;
