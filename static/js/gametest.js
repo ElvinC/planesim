@@ -111,6 +111,104 @@ function setup() {
         scene.addPhysicalChild(test);
     }*/
 
+
+    // Create a new emitter
+    var emitter = new PIXI.particles.Emitter(
+
+        // The PIXI.Container to put the emitter in
+        // if using blend modes, it's important to put this
+        // on top of a bitmap, and not use the root stage Container
+        scene.stage,
+    
+        // The collection of particle images to use
+        [PIXI.Texture.fromImage('../static/assets/sprites/smoke.png')],
+    
+        // Emitter configuration, edit this to change the look
+        // of the emitter
+        {
+            alpha: {
+                list: [
+                    {
+                        value: 0.8,
+                        time: 0
+                    },
+                    {
+                        value: 0.1,
+                        time: 1
+                    }
+                ],
+                isStepped: false
+            },
+            scale: {
+                list: [
+                    {
+                        value: 0.05,
+                        time: 0
+                    },
+                    {
+                        value: 0.01,
+                        time: 1
+                    }
+                ],
+                isStepped: false,
+                "minimumScaleMultiplier": 0.0000001,
+                "maximumScaleMultiplier": 0.000001
+            },
+            color: {
+                list: [
+                    {
+                        value: "ffffff",
+                        time: 0
+                    },
+                    {
+                        value: "ffffff",
+                        time: 1
+                    }
+                ],
+                isStepped: false
+            },
+            speed: {
+                list: [
+                    {
+                        value: 60,
+                        time: 0
+                    },
+                    {
+                        value: 20,
+                        time: 1
+                    }
+                ],
+                isStepped: false
+            },
+            startRotation: {
+                min: 0,
+                max: 360
+            },
+            rotationSpeed: {
+                min: 0,
+                max: 0
+            },
+            lifetime: {
+                min: 0.05,
+                max: 0.1
+            },
+            frequency: 0.0008,
+            spawnChance: 1,
+            particlesPerWave: 1,
+            emitterLifetime: 0,
+            maxParticles: 100,
+            pos: {
+                x: 0,
+                y: 0
+            },
+            addAtBack: false,
+            spawnType: "point",
+        }
+    );
+
+    window.emitter = emitter;
+
+
     for (var i = 0; i < 40; i++) {
         var text = new PIXI.Text(`Distance: ${i * 100}`, {fontFamily : 'Arial', fontSize: 10, fill : 0xff1010, align : 'center'})
         text.position.x = i * 100;
@@ -135,6 +233,8 @@ function render() {
     scene.update()
     scene.camera.setPos(-plane.sprite.position.x, -plane.sprite.position.y)
 
+    emitter.update(0.001);
+    emitter.updateOwnerPos(plane.sprite.position.x, plane.sprite.position.y)
 
     requestAnimationFrame(render);
 }

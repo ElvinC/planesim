@@ -83,3 +83,12 @@ html, body {
     left: 0;
     z-index: 100;
 }
+
+input[type=range]#thrustSlider
+{
+    writing-mode: bt-lr; /* IE */
+    -webkit-appearance: slider-vertical; /* WebKit */
+    width: 8px;
+    height: 175px;
+    padding: 0 5px;
+}

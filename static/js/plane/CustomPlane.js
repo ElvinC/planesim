@@ -115,6 +115,7 @@ export default class CustomPlane {
             // this.body.addTorque(10)
         }
         $("#thrust").html(Math.round(this.thrust))
+        $("#thrustSlider").val(this.thrust / this.maxThrust)
 
         // thrust
         this.body.addForce(Vector.unit(this.body.angle, this.thrust))
@@ -129,10 +130,13 @@ export default class CustomPlane {
 
         const floor = 0
 
+        let hit = false
+
         // bounce on floor
         if (this.body.pos.y > floor) {
             this.body.vel.y = -this.body.vel.y * 0.2
             this.body.pos.y = floor
+            hit = true;
         }
 
         const angleUnit = Vector.unit(this.body.angle)
@@ -140,11 +144,17 @@ export default class CustomPlane {
             this.body.vel.y = -Math.abs(this.body.vel.y) * 0.2
             this.body.pos.y -= this.body.pos.add(angleUnit.multiply(20)).y - floor
             this.body.addTorque(-400 * Math.sin(this.body.angle))
+            hit = true;
         }
         if (this.body.pos.add(angleUnit.multiply(-20)).y > floor) {
             this.body.vel.y = -Math.abs(this.body.vel.y) * 0.2
             this.body.pos.y -= this.body.pos.add(angleUnit.multiply(-20)).y - floor
             this.body.addTorque(-400 * Math.sin(this.body.angle))
+            hit = true;
+        }
+
+        if (hit && this.body.vel.y < -3) {
+            console.log("Dead")
         }
         
 
@@ -211,7 +221,7 @@ export default class CustomPlane {
 
             this.instruments.airspeed.setAirSpeed(speed * 1.944);
             this.instruments.altimeter.setAltitude(altitude);
-            this.instruments.altimeter.setPressure(atmos.pressure / 100);
+            this.instruments.altimeter.setPressure(atmos.pressure / 1000);
         }
         
     }
