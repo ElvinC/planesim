@@ -79,11 +79,20 @@ export default class CustomPlane {
 
         this.body = new physicalObject(x, y, 65000)
 
-        this.speedVec = new GraphicsVector(this.body.vel, 0.2);
+        this.speedVec = new GraphicsVector(this.body.vel, 0.15);
         this.sprite.addChild(this.speedVec)
 
-        this.aeroVec = new GraphicsVector(this.body.vel, 0.00005, 0x0000ff);
-        this.sprite.addChild(this.aeroVec)
+        this.liftVec = new GraphicsVector(this.body.vel, 0.00003, 0x0000ff);
+        this.sprite.addChild(this.liftVec)
+
+        this.dragVec = new GraphicsVector(this.body.vel, 0.00003, 0x0000ff);
+        this.sprite.addChild(this.dragVec)
+
+        this.weightVec = new GraphicsVector(new Vec2(0, 9.81 * this.body.mass), 0.00003, 0x000033);
+        this.sprite.addChild(this.weightVec)
+
+        this.thrustVec = new GraphicsVector(new Vec2(0, 9.81 * this.body.mass), 0.00003, 0x0000ff);
+        this.sprite.addChild(this.thrustVec)
 
         // thrust
         this.thrust = 0
@@ -95,6 +104,11 @@ export default class CustomPlane {
         this.minFlap = -0.5;
         this.maxFlap = 0.5;
     }
+
+    getThrustFraction() {
+        return this.thrust / this.maxThrust
+    }
+
     update() {
         if (this.keys[38]) {
             this.thrust += this.maxThrust / 100;
@@ -122,6 +136,9 @@ export default class CustomPlane {
 
         // update vector
         this.speedVec.update(this.body.vel)
+
+
+        this.thrustVec.update(Vector.unit(this.body.angle, this.thrust))
 
         
         if (this.body.pos.x > 1000) {
@@ -182,12 +199,13 @@ export default class CustomPlane {
         const lift = (new Vec2(velUnit.y, -velUnit.x)).multiply(liftMag)
         this.body.addForce(lift)
 
-        this.aeroVec.update(lift)
+        this.liftVec.update(lift)
 
         const Cd = 0.3 * Math.sin(AoA + this.flap + 0.1);
         const dragMag = Math.abs(Math.min(Cd * dynPressure * 120, 100000000)) 
         const drag = velUnit.multiply(-1 * dragMag)
         this.body.addForce(drag)
+        this.dragVec.update(drag)
 
         $("#acc").html(this.body.acc.length())
 
@@ -222,6 +240,11 @@ export default class CustomPlane {
             this.instruments.airspeed.setAirSpeed(speed * 1.944);
             this.instruments.altimeter.setAltitude(altitude);
             this.instruments.altimeter.setPressure(atmos.pressure / 1000);
+            let newHead = 0.3 * (Math.random() - 0.5)
+            if (this.body.vel.x < 0) {
+                newHead += 180
+            }
+            this.instruments.heading.setHeading(newHead);
         }
         
     }
