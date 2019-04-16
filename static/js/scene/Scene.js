@@ -1,9 +1,9 @@
 import Camera from "./Camera.js";
 
-var Engine = Matter.Engine,
-    World = Matter.World,
-    Bodies = Matter.Bodies,
-    Svg = Matter.Svg
+// var Engine = Matter.Engine,
+//    World = Matter.World,
+//    Bodies = Matter.Bodies,
+//    Svg = Matter.Svg
 
 export default class Scene {
     constructor() {
@@ -12,8 +12,8 @@ export default class Scene {
         this.customPhysicalChildren = [];
 
         // physics variables
-        this.engine = Engine.create();
-        this.engine.world.gravity.scale = 1;
+        // this.engine = Engine.create();
+        // this.engine.world.gravity.scale = 1;
         this.bodies = [];
 
         // PIXI setup
@@ -25,10 +25,10 @@ export default class Scene {
         this.renderer.backgroundColor = 0x87CEEB;
         document.body.appendChild(this.renderer.view);
 
-        var ground = Bodies.rectangle(0, 500, 100000, 50, {isStatic: true, restitution: 1, friction: 0});
+  /*       var ground = Bodies.rectangle(0, 500, 100000, 50, {isStatic: true, restitution: 1, friction: 0});
         this.bodies.push(ground);
         World.add(this.engine.world, [ground]);
-
+ */
         $(window).resize(() => {
             var w = window.innerWidth;
             var h = window.innerHeight;
@@ -57,7 +57,7 @@ export default class Scene {
         window.cam = (this.camera)
         this.camera.setZoom(8)
         this.camera.addChild(this.stage)
-        window.world = this.engine
+        // window.world = this.engine
     }
 
     addChild(child) {
@@ -66,15 +66,15 @@ export default class Scene {
 
     addPhysicalChild(child) {
         // add sprite
-        this.physicalChildren.push(child)
+        //this.physicalChildren.push(child)
 
         // add visual sprite
-        this.stage.addChild(child.sprite);
+        //this.stage.addChild(child.sprite);
 
         // add physical bodies
-        this.bodies.push(child.body)
+        //this.bodies.push(child.body)
 
-        World.add(this.engine.world, [child.body]);
+        //World.add(this.engine.world, [child.body]);
     }
 
     addCustomPhysicalChild(child) {
@@ -84,15 +84,15 @@ export default class Scene {
     }
 
     run() {
-        Engine.run(this.engine)
+        //Engine.run(this.engine)
     }
 
-    update() {
+    update(dt) {
         for (var body in this.physicalChildren) {
             this.physicalChildren[body].update();
         }
         for (var body in this.customPhysicalChildren) {
-            this.customPhysicalChildren[body].update();
+            this.customPhysicalChildren[body].update(dt);
         }
 
     }

@@ -109,7 +109,7 @@ export default class CustomPlane {
         return this.thrust / this.maxThrust
     }
 
-    update() {
+    update(dt) {
         if (this.keys[38]) {
             this.thrust += this.maxThrust / 100;
             this.thrust = Math.max(Math.min(this.thrust, this.maxThrust), this.minThrust)
@@ -219,7 +219,7 @@ export default class CustomPlane {
         this.body.addForce(new Vec2(0, 9.81 * this.body.mass))
 
 
-        this.body.update(1/30)
+        this.body.update(dt)
         
         this.sprite.position = this.body.getPosition();
         this.spriteImg.rotation = this.body.angle;

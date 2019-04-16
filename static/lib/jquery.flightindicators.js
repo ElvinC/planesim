@@ -59,7 +59,7 @@
 					_setRoll(settings.roll);
 					_setPitch(settings.pitch);
 			}
-			$(this).find('div.instrument').css({height : settings.size, width : settings.size});
+			$(this).find('div.instrument').css({height : settings.height, width : settings.width});
 			$(this).find('div.instrument img.box.background').toggle(settings.showBox);
 		});
 

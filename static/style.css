@@ -82,6 +82,8 @@ html, body {
     bottom: 0;
     left: 0;
     z-index: 100;
+    width: 100%;
+    max-width: 1000px;
 }
 
 input[type=range]#thrustSlider
@@ -91,4 +93,21 @@ input[type=range]#thrustSlider
     width: 8px;
     height: 175px;
     padding: 0 5px;
+}
+
+#options {
+    position: fixed;
+    overflow: hidden;
+    right: 0;
+    margin: 0;
+    width: 5px;
+    background-color: aliceblue;
+    height: 100vh;
+    z-index: 100;
+    transition: all 0.2s;
+}
+
+#options:hover {
+    right: 0px;
+    width: 400px;
 }

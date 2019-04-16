@@ -67,6 +67,8 @@ class PhysicalRect {
 $(document).ready(() => {
     // Flight instruments setup
     var options = {
+        width: "18%",
+        height: 200,
         size : 200,				// Sets the size in pixels of the indicator (square)
         roll : 0,				// Roll angle in degrees for an attitude indicator
         pitch : 400,				// Pitch angle in degrees for an attitude indicator
@@ -87,16 +89,27 @@ $(document).ready(() => {
         altimeter: $.flightIndicator('#altimeter', 'altimeter', options),
     }
 
+    // generate buttons
+    
+
     scene = new Scene();
     setup()
 })
 
+
+let last_time = 0;
+
 function setup() {
     
-    var floorSprite = new PIXI.Graphics();
-    floorSprite.beginFill(0x1e824c);
-    floorSprite.drawRect(0 - 50000, 0, 100000, 50);
-    floorSprite.endFill();
+    // var floorSprite = new PIXI.Graphics();
+    // floorSprite.beginFill(0x1e824c);
+    // floorSprite.drawRect(0 - 50000, 0, 100000, 50);
+    // floorSprite.endFill();
+    var floorSprite = new PIXI.TilingSprite(PIXI.Texture.fromImage('../static/assets/sprites/grass.png'), 100000, 100);
+    floorSprite.tileScale.x = 0.1;
+    floorSprite.tileScale.y = 0.1;
+    floorSprite.position.x = -50000
+
     scene.addChild(floorSprite)
 
     // var test = new PhysicalBall(1000, 5, 50);
@@ -142,7 +155,7 @@ function setup() {
             scale: {
                 list: [
                     {
-                        value: 0.05,
+                        value: 0.03,
                         time: 0
                     },
                     {
@@ -228,17 +241,23 @@ function setup() {
     planesound.loop = true;
     planesound.play();
 
-
+    last_time = performance.now()
     scene.run()
     render()
 }
 let counterthing = 1
 
+
 // render loop
 function render() {
+    let now = performance.now()
+    let dt = (now - last_time) / 1000
+    last_time = now
+
     counterthing += 1;
     scene.render()
-    scene.update()
+    // update simulation
+    scene.update(dt)
     scene.camera.setPos(-plane.sprite.position.x, -plane.sprite.position.y)
 
     emitter.update(0.001);
