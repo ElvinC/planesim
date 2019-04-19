@@ -1,20 +1,10 @@
 import Camera from "./Camera.js";
 
-// var Engine = Matter.Engine,
-//    World = Matter.World,
-//    Bodies = Matter.Bodies,
-//    Svg = Matter.Svg
-
 export default class Scene {
     constructor() {
         // object list
-        this.physicalChildren = [];
         this.customPhysicalChildren = [];
 
-        // physics variables
-        // this.engine = Engine.create();
-        // this.engine.world.gravity.scale = 1;
-        this.bodies = [];
 
         // PIXI setup
         this.renderer = new PIXI.autoDetectRenderer(1000, 500, {antialias: true});
@@ -23,12 +13,9 @@ export default class Scene {
         this.renderer.autoResize = true;
         this.renderer.resize(window.innerWidth, window.innerHeight);
         this.renderer.backgroundColor = 0x87CEEB;
+        window.renderer = this.renderer
         document.body.appendChild(this.renderer.view);
 
-  /*       var ground = Bodies.rectangle(0, 500, 100000, 50, {isStatic: true, restitution: 1, friction: 0});
-        this.bodies.push(ground);
-        World.add(this.engine.world, [ground]);
- */
         $(window).resize(() => {
             var w = window.innerWidth;
             var h = window.innerHeight;
@@ -38,7 +25,7 @@ export default class Scene {
             this.camera.update();
         })
 
-        // keys down
+        // Keep tract of the pressed keys
         this.keys = {}
         var _this = this;
         $(window).keydown((e) => {
@@ -57,40 +44,22 @@ export default class Scene {
         window.cam = (this.camera)
         this.camera.setZoom(8)
         this.camera.addChild(this.stage)
-        // window.world = this.engine
     }
 
     addChild(child) {
+        // add graphics only
         this.stage.addChild(child);
     }
 
-    addPhysicalChild(child) {
-        // add sprite
-        //this.physicalChildren.push(child)
-
-        // add visual sprite
-        //this.stage.addChild(child.sprite);
-
-        // add physical bodies
-        //this.bodies.push(child.body)
-
-        //World.add(this.engine.world, [child.body]);
-    }
 
     addCustomPhysicalChild(child) {
-        // add visual sprite
+        // add physical object with graphics and physics
         this.stage.addChild(child.sprite);
         this.customPhysicalChildren.push(child)
     }
 
-    run() {
-        //Engine.run(this.engine)
-    }
-
     update(dt) {
-        for (var body in this.physicalChildren) {
-            this.physicalChildren[body].update();
-        }
+        // update physics
         for (var body in this.customPhysicalChildren) {
             this.customPhysicalChildren[body].update(dt);
         }

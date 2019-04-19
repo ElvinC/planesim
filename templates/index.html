@@ -27,15 +27,24 @@
         
     </div>
     <div id="instruments">
+        <div class="slider-wrapper">
+            <input type="range" id="thrustSlider" min="0" max="1" value="0" step="0.001"/>
+        </div>
+        <div class="slider-wrapper">
+            <input type="range" id="elevatorSlider" min="-1" max="1" value="0" step="0.001"/>
+        </div>
+        <br>
         <span id="attitude"></span>
         <span id="heading"></span>
         <span id="variometer"></span>
         <span id="airspeed"></span>
         <span id="altimeter"></span>
-        <input type="range" id="thrustSlider" min="0" max="1" value="0" step="0.001"/>
     </div>
 
-    <div id="options">hello world</div>
+    <div id="options">
+    </div>
+
+    <div id="largemsg"></div>
 </body>
 </html>
 

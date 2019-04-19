@@ -1,6 +1,6 @@
 import { Vec2, Vector } from "./Vec2.js";
 import GraphicsVector from "../scene/GraphicsVector.js";
-import { ISA } from "../Physics/atmosphere.js";
+import { ISA } from "../physics/atmosphere.js";
 
 
 class physicalObject {
@@ -68,6 +68,10 @@ export default class CustomPlane {
         this.spriteImg.height = 24;
         this.sprite.addChild(this.spriteImg)
 
+        this.explodesound = new Audio();
+        this.explodesound.src = "../../static/assets/sound/explode1.mp3";
+    
+
         this.keys = keys
 
         if (instruments) {
@@ -79,6 +83,7 @@ export default class CustomPlane {
 
         this.body = new physicalObject(x, y, 65000)
 
+        // initialize graphical vectors
         this.speedVec = new GraphicsVector(this.body.vel, 0.15);
         this.sprite.addChild(this.speedVec)
 
@@ -94,6 +99,8 @@ export default class CustomPlane {
         this.thrustVec = new GraphicsVector(new Vec2(0, 9.81 * this.body.mass), 0.00003, 0x0000ff);
         this.sprite.addChild(this.thrustVec)
 
+        this.vectorList = [this.speedVec, this.liftVec, this.dragVec, this.weightVec, this.thrustVec]
+
         // thrust
         this.thrust = 0
         this.minThrust = 0;
@@ -103,6 +110,12 @@ export default class CustomPlane {
         this.flap = 0;
         this.minFlap = -0.5;
         this.maxFlap = 0.5;
+
+        // misc settings
+        this.settings = {
+            showVector: true,
+            updateHUD: true,
+        }
     }
 
     getThrustFraction() {
@@ -128,8 +141,9 @@ export default class CustomPlane {
             this.flap = Math.max(Math.min(this.flap, this.maxFlap), this.minFlap)
             // this.body.addTorque(10)
         }
-        $("#thrust").html(Math.round(this.thrust))
+        
         $("#thrustSlider").val(this.thrust / this.maxThrust)
+        $("#elevatorSlider").val(-this.flap / 0.5)
 
         // thrust
         this.body.addForce(Vector.unit(this.body.angle, this.thrust))
@@ -171,7 +185,13 @@ export default class CustomPlane {
         }
 
         if (hit && this.body.vel.y < -3) {
-            console.log("Dead")
+            window.emitter.startColor.value = {r: 255, g: 120, b: 120}
+            this.explodesound.play();
+            $("#largemsg").html("You crashed")
+            setTimeout(function() {
+                $("#largemsg").html("");
+                window.emitter.startColor.value = {r: 255, g: 255, b: 255}
+            }, 5000)
         }
         
 
@@ -190,12 +210,9 @@ export default class CustomPlane {
 
         const dynPressure = 0.5 * density * speedSquared
 
-        $("#speed").html(Math.round(speed*1.944))
-        $("#vSpeed").html(Math.round(-this.body.vel.y));
-        $("#altitude").html(-Math.round(this.body.pos.y) + ", " + -Math.round(this.body.pos.x))
-        $("#elevator").html(Math.round(this.flap * 100)/100)
+
         const liftMag = Math.min(Math.max(Cl * dynPressure * 120, -100000000), 100000000) 
-        $("#lift").html((liftMag))
+       
         const lift = (new Vec2(velUnit.y, -velUnit.x)).multiply(liftMag)
         this.body.addForce(lift)
 
@@ -207,8 +224,16 @@ export default class CustomPlane {
         this.body.addForce(drag)
         this.dragVec.update(drag)
 
-        $("#acc").html(this.body.acc.length())
-
+        if(this.settings.updateHUD){
+            $("#thrust").html(Math.round(this.thrust))
+            $("#speed").html(Math.round(speed*1.944))
+            $("#vSpeed").html(Math.round(-this.body.vel.y));
+            $("#altitude").html(-Math.round(this.body.pos.y) + ", " + -Math.round(this.body.pos.x))
+            $("#elevator").html(Math.round(this.flap * 100)/100)
+            $("#lift").html(liftMag)
+            $("#acc").html(this.body.acc.length())
+        }
+            
         // turn towards moving direction
         this.body.addTorque(AoA * speed * 0.1)
 
@@ -247,5 +272,12 @@ export default class CustomPlane {
             this.instruments.heading.setHeading(newHead);
         }
         
+    }
+
+    showVector(setting) {
+        for (var i = 0; i < this.vectorList.length; i++) {
+            this.vectorList[i].setVisibility(setting)
+            this.vectorList[i].update()
+        }
     }
 }

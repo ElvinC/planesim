@@ -1,5 +1,6 @@
 import Scene from './scene/Scene.js'
 import CustomPlane from './plane/CustomPlane.js';
+import { mixColor } from './scene/Color.js';
 /*
 var Engine = Matter.Engine,
     World = Matter.World,
@@ -105,7 +106,7 @@ function setup() {
     // floorSprite.beginFill(0x1e824c);
     // floorSprite.drawRect(0 - 50000, 0, 100000, 50);
     // floorSprite.endFill();
-    var floorSprite = new PIXI.TilingSprite(PIXI.Texture.fromImage('../static/assets/sprites/grass.png'), 100000, 100);
+    var floorSprite = new PIXI.extras.TilingSprite(PIXI.Texture.fromImage('../static/assets/sprites/grass.png'), 100000, 100);
     floorSprite.tileScale.x = 0.1;
     floorSprite.tileScale.y = 0.1;
     floorSprite.position.x = -50000
@@ -227,31 +228,78 @@ function setup() {
         text.position.x = i * 100;
         text.position.y = -100;
         scene.addChild(text)
+
+        var cloud = new PIXI.Graphics();
+        cloud.beginFill(0xffffff, 0.1)
+        cloud.drawEllipse(i*100, - (Math.random() * 400 + 100), 50, 30)
+        scene.addChild(cloud)
     }
 
     var pla = new CustomPlane(0, 0, scene.keys, instruments = instruments)
-    console.log(pla)
+    // console.log(pla)
 
     window.plane = pla;
     scene.addCustomPhysicalChild(pla);
 
     var planesound = new Audio();
     window.planesound = planesound;
-    planesound.src = "../static/assets/sound/planesound.mp3";
+    planesound.src = "../static/assets/sound/planesound2.mp3";
     planesound.loop = true;
-    planesound.play();
+
+    var soundStarted = false;
+
+    $(window).keydown(function() {
+        if (!soundStarted) {
+            planesound.play();
+            soundStarted = true;
+        }
+    })
+
 
     last_time = performance.now()
-    scene.run()
     render()
+
+    var settingFunctions = [
+        {
+            id: "#toggleVector",
+            text: "Show vectors",
+            changeFunc: function(e) {
+                plane.showVector(this.checked)
+            }
+        },
+        {
+            id:"#toggleDebug",
+            text: "Show debug",
+            changeFunc: function(e) {
+                $("#HUD").css("display", this.checked ? "block": "none");
+                plane.settings.updateHUD = this.checked;
+            }
+        }
+    ]
+
+    var options = $("#options")
+
+    for (var set of settingFunctions) {
+        var settingsBlock = $('<div class="optionblock"></div>')
+        settingsBlock.html(set.text)
+        var checkbox = $('<input type="checkbox" id="' + set.id + '" checked="true">')
+        checkbox.change(set.changeFunc)
+        settingsBlock.append(checkbox)
+        options.append(settingsBlock)
+
+    }
 }
 let counterthing = 1
 
+function interpolateColor(start, end, ratio) {
+
+}
 
 // render loop
 function render() {
+    // calculate time difference
     let now = performance.now()
-    let dt = (now - last_time) / 1000
+    let dt = Math.min((now - last_time) / 1000, 1/10) // limit min delta t
     last_time = now
 
     counterthing += 1;
@@ -266,6 +314,10 @@ function render() {
         emitter.frequency = (1  / (plane.getThrustFraction()*1000 + 10))
         planesound.volume = plane.getThrustFraction()
     }
+
+    // change background-color with altitude
+    var newBGColor = mixColor([135, 206, 235], [0, 0, 3], Math.min(-plane.sprite.position.y / 30000, 1))
+    scene.renderer.backgroundColor =  PIXI.utils.rgb2hex(newBGColor)
     
     //console.log(emitter.frequency)
     requestAnimationFrame(render);
