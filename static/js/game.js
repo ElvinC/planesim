@@ -1,71 +1,22 @@
 import Scene from './scene/Scene.js'
-import CustomPlane from './plane/CustomPlane.js';
+import CustomPlane from './plane/Plane.js';
 import { mixColor } from './scene/Color.js';
-/*
-var Engine = Matter.Engine,
-    World = Matter.World,
-    Bodies = Matter.Bodies,
-    Svg = Matter.Svg,
-    Vector = Matter.Vector
-*/
-/*
-Vector.unit = function(angle, len = 1) {
-    return {
-        x: Math.cos(angle) * len,
-        y: Math.sin(angle) * len
-    }
-}
-*/
-// stage objects
-var stageObjects = []
+
 
 var scene;
 
 var instruments;
 
-function SpriteObjects(x, y, radius) {
-    var sprite = new PIXI.Graphics();
-    sprite.beginFill(0x3355ff);
-    sprite.drawCircle(0, 0, radius);
-    sprite.endFill();
-    return sprite
-}
-
-function PhysicsObject(x, y, radius) {
-    var circ = Bodies.circle(x, y, radius, {restitution: 0.4})
-    return circ;
-}
-
-class PhysicalBall {
-    constructor(x, y, radius) {
-        this.sprite = SpriteObjects(x, y, radius)
-        this.body = PhysicsObject(x, y, radius)
-    }
-
-    update() {
-        this.sprite.position = this.body.position;
-        this.sprite.rotation = this.body.angle;
-    }
-}
-
-class PhysicalRect {
-    constructor(x, y, width, height) {
-        this.sprite = new PIXI.Graphics()
-        this.sprite.beginFill(0xffffff)
-        this.sprite.drawRect(0 - width/2, 0 - height/2, width, height)
-        this.sprite.endFill()
-
-        this.body = Bodies.rectangle(x, y, width, height, {restitution: 0.4})
-
-    }
-
-    update() {
-        this.sprite.position = this.body.position;
-        this.sprite.rotation = this.body.angle;
-    }
-}
 
 $(document).ready(() => {
+    scene = new Scene();
+    setup()
+})
+
+
+let last_time = 0;
+
+function setup() {
     // Flight instruments setup
     var options = {
         width: "18%",
@@ -79,9 +30,10 @@ $(document).ready(() => {
         altitude: 0,			// Altitude in feets for an altimeter indicator
         pressure: 1000,			// Pressure in hPa for an altimeter indicator
         showBox : false,			// Sets if the outer squared box is visible or not (true or false)
-        img_directory : '../static/img/'	// The directory where the images are saved to
+        img_directory : '../static/assets/instruments/'	// The directory where the images are saved to
     }
 
+    // dict of instruments
     instruments = {
         attitude: $.flightIndicator('#attitude', 'attitude', options),
         heading: $.flightIndicator('#heading', 'heading', options),
@@ -90,55 +42,17 @@ $(document).ready(() => {
         altimeter: $.flightIndicator('#altimeter', 'altimeter', options),
     }
 
-    // generate buttons
-    
-
-    scene = new Scene();
-    setup()
-})
-
-
-let last_time = 0;
-
-function setup() {
-    
-    // var floorSprite = new PIXI.Graphics();
-    // floorSprite.beginFill(0x1e824c);
-    // floorSprite.drawRect(0 - 50000, 0, 100000, 50);
-    // floorSprite.endFill();
+    // create ground sprite
     var floorSprite = new PIXI.extras.TilingSprite(PIXI.Texture.fromImage('../static/assets/sprites/grass.png'), 100000, 100);
     floorSprite.tileScale.x = 0.1;
     floorSprite.tileScale.y = 0.1;
     floorSprite.position.x = -50000
-
     scene.addChild(floorSprite)
 
-    // var test = new PhysicalBall(1000, 5, 50);
-
-    // scene.addPhysicalChild(test);
-    
-
-    /*
-    for (var i = 0; i< 4; i++) {
-        var test = new PhysicalBall(Math.random()*500, Math.random()*500, 50);
-
-        scene.addPhysicalChild(test);
-    }*/
-
-
-    // Create a new emitter
+    // Create exhaust particle emitter
     var emitter = new PIXI.particles.Emitter(
-
-        // The PIXI.Container to put the emitter in
-        // if using blend modes, it's important to put this
-        // on top of a bitmap, and not use the root stage Container
         scene.stage,
-    
-        // The collection of particle images to use
         [PIXI.Texture.fromImage('../static/assets/sprites/smoke.png')],
-    
-        // Emitter configuration, edit this to change the look
-        // of the emitter
         {
             alpha: {
                 list: [
@@ -222,11 +136,14 @@ function setup() {
 
     window.emitter = emitter;
 
-
-    for (var i = 0; i < 40; i++) {
-        var text = new PIXI.Text(`Distance: ${i * 100}`, {fontFamily : 'Arial', fontSize: 10, fill : 0xff1010, align : 'center'})
+    
+    // draw text and clouds
+    for (var i = 0; i < 100; i++) {
+        var text = new PIXI.Text(`Distance: ${i * 100}`, {fontFamily : 'Arial', fontSize: 18, fill : 0xffffff, align : 'center'})
         text.position.x = i * 100;
-        text.position.y = -100;
+        text.position.y = 5;
+        text.scale.x = 0.2
+        text.scale.y = 0.2
         scene.addChild(text)
 
         var cloud = new PIXI.Graphics();
@@ -235,19 +152,21 @@ function setup() {
         scene.addChild(cloud)
     }
 
-    var pla = new CustomPlane(0, 0, scene.keys, instruments = instruments)
-    // console.log(pla)
+    // create new plane
+    var plane = new CustomPlane(0, 0, scene.keys, instruments = instruments)
 
-    window.plane = pla;
-    scene.addCustomPhysicalChild(pla);
+    // global plane variable
+    window.plane = plane;
+    scene.addCustomPhysicalChild(plane);
 
+    // create plane engine sound
     var planesound = new Audio();
     window.planesound = planesound;
     planesound.src = "../static/assets/sound/planesound2.mp3";
     planesound.loop = true;
-
     var soundStarted = false;
 
+    // start sound after first keypress
     $(window).keydown(function() {
         if (!soundStarted) {
             planesound.play();
@@ -255,24 +174,44 @@ function setup() {
         }
     })
 
-
-    last_time = performance.now()
-    render()
-
+    // settings for sidebar
     var settingFunctions = [
         {
-            id: "#toggleVector",
+            id: "toggleVector",
             text: "Show vectors",
+            element: '<input type="checkbox" id="toggleVector" checked="true">',
             changeFunc: function(e) {
                 plane.showVector(this.checked)
             }
         },
         {
-            id:"#toggleDebug",
+            id:"toggleDebug",
             text: "Show debug",
+            element: '<input type="checkbox" id="toggleDebug" checked="true">',
             changeFunc: function(e) {
                 $("#HUD").css("display", this.checked ? "block": "none");
                 plane.settings.updateHUD = this.checked;
+            }
+        },
+        {
+            id:"maxThrust",
+            text: "Max thrust",
+            element: '<input type="number" id="maxThrust" min="1" value="300000" step="100000">',
+            changeFunc: function(e) {
+                if (!isNaN(this.value)) {
+                    plane.maxThrust = Math.max(parseInt(this.value), 1);
+                }
+            }
+        },
+        {
+            id:"camZoom",
+            text: "Camera zoom",
+            element: '<input type="number" id="maxThrust" min="0" max="16" value="8" step="0.5">',
+            changeFunc: function(e) {
+                const val = parseFloat(this.value);
+                if (val > 0.01 && val < 16) {
+                    cam.setZoom(val)
+                }
             }
         }
     ]
@@ -281,19 +220,36 @@ function setup() {
 
     for (var set of settingFunctions) {
         var settingsBlock = $('<div class="optionblock"></div>')
-        settingsBlock.html(set.text)
-        var checkbox = $('<input type="checkbox" id="' + set.id + '" checked="true">')
+        settingsBlock.append('<div class="optionText">'+ set.text +'</div>'  )
+        var checkbox = $(set.element)
         checkbox.change(set.changeFunc)
         settingsBlock.append(checkbox)
         options.append(settingsBlock)
 
     }
+
+    // event listener for options toggle
+    $("#toggleOptions").click(function() {
+        $(this).toggleClass("is-active")
+        if ($(this).hasClass("is-active")) {
+            $("#options").addClass("expanded")
+        }
+        else {
+            $("#options").removeClass("expanded")
+        }
+    })
+    // hide options if click away
+    $(scene.renderer.view).click(function(e) {
+        $("#options").removeClass("expanded");
+        $("#toggleOptions").removeClass("is-active")
+    })
+
+    // begin render loop
+    last_time = performance.now()
+    render()
 }
 let counterthing = 1
 
-function interpolateColor(start, end, ratio) {
-
-}
 
 // render loop
 function render() {
@@ -310,6 +266,8 @@ function render() {
 
     emitter.update(0.001);
     emitter.updateOwnerPos(plane.sprite.position.x, plane.sprite.position.y)
+
+    // update plane volume and particle emitter
     if (counterthing % 10 == 0) {
         emitter.frequency = (1  / (plane.getThrustFraction()*1000 + 10))
         planesound.volume = plane.getThrustFraction()

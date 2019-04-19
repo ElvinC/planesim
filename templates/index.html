@@ -18,8 +18,9 @@
 <body>
     <div id="HUD">
         Speed: <span id="speed"></span> <br>
-        Altitude: <span id="altitude"></span> <br>
+        Coords: <span id="altitude"></span> <br>
         Lift: <span id="lift"></span> <br>
+        Density:<span id="density"></span> <br>
         VSpeed: <span id="vSpeed"></span> <br>
         Acc: <span id="acc"></span> <br>
         Thrust: <span id="thrust"></span> <br>
@@ -41,7 +42,17 @@
         <span id="altimeter"></span>
     </div>
 
-    <div id="options">
+    <div id="optionsWrapper">
+        <div id="optionsbutton">
+            <button class="hamburger hamburger--squeeze" type="button" id="toggleOptions">
+                <span class="hamburger-box">
+                    <span class="hamburger-inner"></span>
+                </span>
+            </button>
+                    
+        </div>
+        <div id="options" class="">
+        </div>
     </div>
 
     <div id="largemsg"></div>

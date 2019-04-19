@@ -17,7 +17,6 @@ export default class Camera extends PIXI.Container {
     setZoom(zoom) {
         this.zoom = zoom;
         cam.scale.x = cam.scale.y = zoom;
-        // console.log(this.zoom)
         this.update()
     }
 
