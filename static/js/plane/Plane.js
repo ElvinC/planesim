@@ -64,7 +64,7 @@ export default class CustomPlane {
         this.sprite.addChild(this.spriteImg)
 
         this.explodesound = new Audio();
-        this.explodesound.src = "../../static/assets/sound/explode1.mp3";
+        this.explodesound.src = "../static/assets/sound/explode1.mp3";
     
 
         this.keys = keys
