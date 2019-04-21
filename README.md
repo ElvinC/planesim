@@ -4,4 +4,4 @@ planesim is a simple flight simulator built around a custom physics engine and P
 
 ## Usage
 
-The simulator can be accessed online at [https://elvinchen.com/planesim/](https://elvinchen.com/planesim/). The files from the can alternatively be run locally with a static web server.
+The simulator can be accessed online at [https://elvinchen.com/planesim/](https://elvinchen.com/planesim/). The files can alternatively be run locally with a static web server.
