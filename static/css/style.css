@@ -76,6 +76,7 @@ html, body {
     font-size: 20px;
     z-index: 90;
     width: 50%;
+    padding: 5px;
 }
 
 #instruments {
@@ -124,10 +125,12 @@ input[type=range]#elevatorSlider
     overflow: hidden;
     margin: 0;
     width: 0px;
+    padding: 5px;
     background-color: aliceblue;
     height: 100%;
     z-index: 100;
     transition: all 0.2s;
+    font-size: 18px;
 }
 
 #options.expanded {
@@ -135,16 +138,26 @@ input[type=range]#elevatorSlider
 }
 
 .optionblock {
-    padding: 5px;
     display: flex;
+    padding-top: 10px;
 }
 
 .optionblock .optionText {
     flex: 1;
+    font-size: 18px;
+}
+
+.optionblock input[type=number] {
+    padding: 5px;
+    width: 40%;
 }
 
 #toggleOptions {
     background-color: aliceblue;
+}
+
+#instructions {
+    font-size: 16px;
 }
 
 #largemsg {
@@ -156,6 +169,7 @@ input[type=range]#elevatorSlider
     text-align: center;
     font-size: 40px;
 }
+
 
 /* Hamburger button */
 
@@ -260,3 +274,63 @@ input[type=range]#elevatorSlider
     transform: rotate(-90deg);
     transition: bottom 0.075s ease, transform 0.075s 0.12s cubic-bezier(0.215, 0.61, 0.355, 1);
 }
+
+
+/* toggle */
+
+.tgl {
+    display: none;
+  }
+  .tgl, .tgl:after, .tgl:before, .tgl *, .tgl *:after, .tgl *:before, .tgl + .tgl-btn {
+    box-sizing: border-box;
+  }
+  .tgl::-moz-selection, .tgl:after::-moz-selection, .tgl:before::-moz-selection, .tgl *::-moz-selection, .tgl *:after::-moz-selection, .tgl *:before::-moz-selection, .tgl + .tgl-btn::-moz-selection {
+    background: none;
+  }
+  .tgl::selection, .tgl:after::selection, .tgl:before::selection, .tgl *::selection, .tgl *:after::selection, .tgl *:before::selection, .tgl + .tgl-btn::selection {
+    background: none;
+  }
+  .tgl + .tgl-btn {
+    outline: 0;
+    display: block;
+    width: 4em;
+    height: 2em;
+    position: relative;
+    cursor: pointer;
+    -webkit-user-select: none;
+       -moz-user-select: none;
+        -ms-user-select: none;
+            user-select: none;
+  }
+  .tgl + .tgl-btn:after, .tgl + .tgl-btn:before {
+    position: relative;
+    display: block;
+    content: "";
+    width: 50%;
+    height: 100%;
+  }
+  .tgl + .tgl-btn:after {
+    left: 0;
+  }
+  .tgl + .tgl-btn:before {
+    display: none;
+  }
+  .tgl:checked + .tgl-btn:after {
+    left: 50%;
+  }
+  
+  .tgl-light + .tgl-btn {
+    background: #f0f0f0;
+    border-radius: 2em;
+    padding: 2px;
+    transition: all 0.4s ease;
+  }
+  .tgl-light + .tgl-btn:after {
+    border-radius: 50%;
+    background: #fff;
+    transition: all 0.2s ease;
+  }
+  .tgl-light:checked + .tgl-btn {
+    background: #9fd6ae;
+  }
+  

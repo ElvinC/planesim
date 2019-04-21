@@ -179,7 +179,7 @@ function setup() {
         {
             id: "toggleVector",
             text: "Show vectors",
-            element: '<input type="checkbox" id="toggleVector" checked="true">',
+            element: '<input type="checkbox" id="toggleVector" checked="true" class="tgl tgl-light"><label for="toggleVector" class="tgl-btn"><label>',
             changeFunc: function(e) {
                 plane.showVector(this.checked)
             }
@@ -187,7 +187,7 @@ function setup() {
         {
             id:"toggleDebug",
             text: "Show debug",
-            element: '<input type="checkbox" id="toggleDebug" checked="true">',
+            element: '<input type="checkbox" id="toggleDebug" checked="true" class="tgl tgl-light"><label for="toggleDebug" class="tgl-btn"><label>',
             changeFunc: function(e) {
                 $("#HUD").css("display", this.checked ? "block": "none");
                 plane.settings.updateHUD = this.checked;
@@ -196,7 +196,7 @@ function setup() {
         {
             id:"maxThrust",
             text: "Max thrust",
-            element: '<input type="number" id="maxThrust" min="1" value="300000" step="100000">',
+            element: '<input type="number" id="maxThrust" min="0" value="400000" step="100000">',
             changeFunc: function(e) {
                 if (!isNaN(this.value)) {
                     plane.maxThrust = Math.max(parseInt(this.value), 1);
@@ -216,7 +216,7 @@ function setup() {
         }
     ]
 
-    var options = $("#options")
+    var options = $("#configOptions")
 
     for (var set of settingFunctions) {
         var settingsBlock = $('<div class="optionblock"></div>')
@@ -239,10 +239,11 @@ function setup() {
         }
     })
     // hide options if click away
+    /*
     $(scene.renderer.view).click(function(e) {
         $("#options").removeClass("expanded");
         $("#toggleOptions").removeClass("is-active")
-    })
+    })*/
 
     // begin render loop
     last_time = performance.now()
@@ -270,7 +271,7 @@ function render() {
     // update plane volume and particle emitter
     if (counterthing % 10 == 0) {
         emitter.frequency = (1  / (plane.getThrustFraction()*1000 + 10))
-        planesound.volume = plane.getThrustFraction()
+        planesound.volume = Math.min(plane.getThrustFraction(), 1)
     }
 
     // change background-color with altitude

@@ -1,29 +1,36 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<!--<link rel="stylesheet" type="text/css" href="{{url_for('static', filename='style.css')}}">
+    <!-- for python/flask -->
+    <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='css/style.css')}}">
+    <link rel="shortcut icon" href="{{url_for('static', filename='favicon.png')}}" />
     <script src="{{url_for('static', filename='lib/jquery.min.js')}}"></script>
-    <script src="{{url_for('static', filename='lib/matter.js')}}"></script>
+    <script src="{{url_for('static', filename='lib/jquery.flightindicators.js')}}"></script>
+    <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='css/flightindicators.min.css')}}">
     <script src="{{url_for('static', filename='lib/pixi.min.js')}}"></script>
-    <script src="{{url_for('static', filename='js/game.js')}}" type="module"></script>-->
-    <link rel="stylesheet" type="text/css" href="../static/style.css">
+    <script src="{{url_for('static', filename='lib/pixi-particles.min.js')}}"></script>
+    <script src="{{url_for('static', filename='js/game.js')}}" type="module"></script>
+    
+    <!-- static website -->
+    <!--<link rel="stylesheet" type="text/css" href="../static/css/style.css">
+    <link rel="shortcut icon" href="../static/favicon.png" />
     <script src="../static/lib/jquery.min.js"></script>
     <script src="../static/lib/jquery.flightindicators.js"></script>
     <link rel="stylesheet" type="text/css" href="../static/css/flightindicators.min.css">
     <script src="../static/lib/pixi.min.js"></script>
     <script src="../static/lib/pixi-particles.min.js"></script>
-    <script src="../static/js/game.js" type="module"></script>
+    <script src="../static/js/game.js" type="module"></script>-->
 	<title>Plane</title>
 </head>
 <body>
     <div id="HUD">
-        Speed: <span id="speed"></span> <br>
-        Coords: <span id="altitude"></span> <br>
-        Lift: <span id="lift"></span> <br>
-        Density:<span id="density"></span> <br>
-        VSpeed: <span id="vSpeed"></span> <br>
-        Acc: <span id="acc"></span> <br>
-        Thrust: <span id="thrust"></span> <br>
+        Speed [m/s]: <span id="speed"></span> <br>
+        Coords [m]: <span id="altitude"></span> <br>
+        Lift [N]: <span id="lift"></span> <br>
+        Density [kg/m^3]: <span id="density"></span> <br>
+        VSpeed [m/s]: <span id="vSpeed"></span> <br>
+        Acc [m/s^2]: <span id="acc"></span> <br>
+        Thrust [N]: <span id="thrust"></span> <br>
         Elevator: <span id="elevator"></span>
         
     </div>
@@ -44,14 +51,32 @@
 
     <div id="optionsWrapper">
         <div id="optionsbutton">
-            <button class="hamburger hamburger--squeeze" type="button" id="toggleOptions">
+            <button class="hamburger hamburger--squeeze is-active" type="button" id="toggleOptions">
                 <span class="hamburger-box">
                     <span class="hamburger-inner"></span>
                 </span>
             </button>
                     
         </div>
-        <div id="options" class="">
+        <div id="options" class="expanded">
+            <b>Settings</b> <br>
+            <div id="configOptions"></div>
+            <hr>
+            <div id="instructions">
+                <b>Instructions</b> <br>
+                Control the amount of thrust using the up/down arrow keys. <br>
+                Control the flaps/elevator using the left/right arrow keys. <br>
+                The vertical slider shows the engine thrust. <br>
+                The horizontal slider shows the elevator setting (controls the pitch). <br> <br>
+                <b>First time use:</b>
+                <ol>
+                    <li>Hold up-arrow until the engine is at max thrust (indicator at lower left corner).</li>
+                    <li>Wait for the speed to reach ~250 knots as indicated by the airspeed indicator.</li>
+                    <li>Angle the elevators up using left-arrow to take off.</li>
+                    <li>Don't crash</li>
+                </ol>
+                <span style="font-size: 14px;color:#555">Disclaimer: The developer takes no responsibility for the abuse of the max thrust setting which may or may not send the plane into space.</span>
+            </div>
         </div>
     </div>
 

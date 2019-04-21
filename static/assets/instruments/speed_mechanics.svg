@@ -20,7 +20,7 @@
    inkscape:version="0.92.3 (2405546, 2018-03-11)"><metadata
    id="metadata111"><rdf:RDF><cc:Work
        rdf:about=""><dc:format>image/svg+xml</dc:format><dc:type
-         rdf:resource="http://purl.org/dc/dcmitype/StillImage" /><dc:title></dc:title></cc:Work></rdf:RDF></metadata><defs
+         rdf:resource="http://purl.org/dc/dcmitype/StillImage" /><dc:title /></cc:Work></rdf:RDF></metadata><defs
    id="defs109" /><sodipodi:namedview
    pagecolor="#ffffff"
    bordercolor="#666666"
@@ -30,15 +30,15 @@
    guidetolerance="10"
    inkscape:pageopacity="0"
    inkscape:pageshadow="2"
-   inkscape:window-width="1920"
-   inkscape:window-height="1001"
+   inkscape:window-width="2560"
+   inkscape:window-height="1377"
    id="namedview107"
    showgrid="false"
    inkscape:zoom="3.3319964"
-   inkscape:cx="183.28148"
-   inkscape:cy="198.88702"
-   inkscape:window-x="-9"
-   inkscape:window-y="-9"
+   inkscape:cx="169.7287"
+   inkscape:cy="217.0595"
+   inkscape:window-x="-8"
+   inkscape:window-y="-8"
    inkscape:window-maximized="1"
    inkscape:current-layer="Layer_2" />
 <circle
@@ -443,56 +443,69 @@
    stroke-miterlimit="10"
    font-size="20"
    id="text84"
-   style="font-size:20px;font-family:sans-serif;fill:#ffffff;stroke:#ffffff;stroke-width:0.5;stroke-miterlimit:10">40</text>
+   style="font-size:20px;font-family:sans-serif;fill:#ffffff;stroke:#ffffff;stroke-width:0.5;stroke-miterlimit:10">80</text>
+
 
 <text
-   transform="translate(292.1592,187.1489)"
    stroke-miterlimit="10"
    font-size="20"
    id="text86"
-   style="font-size:20px;font-family:sans-serif;fill:#ffffff;stroke:#ffffff;stroke-width:0.5;stroke-miterlimit:10">80</text>
+   style="font-size:20px;font-family:sans-serif;fill:#ffffff;stroke:#ffffff;stroke-width:0.5;stroke-miterlimit:10"
+   x="284.09494"
+   y="186.72447">160</text>
+
 
 <text
    transform="translate(267.3848,263.3359)"
    stroke-miterlimit="10"
    font-size="20"
    id="text88"
-   style="font-size:20px;font-family:sans-serif;fill:#ffffff;stroke:#ffffff;stroke-width:0.5;stroke-miterlimit:10">120</text>
+   style="font-size:20px;font-family:sans-serif;fill:#ffffff;stroke:#ffffff;stroke-width:0.5;stroke-miterlimit:10">240</text>
+
 
 <text
    transform="translate(225.0059,302.1489)"
    stroke-miterlimit="10"
    font-size="20"
    id="text90"
-   style="font-size:20px;font-family:sans-serif;fill:#ffffff;stroke:#ffffff;stroke-width:0.5;stroke-miterlimit:10">160</text>
+   style="font-size:20px;font-family:sans-serif;fill:#ffffff;stroke:#ffffff;stroke-width:0.5;stroke-miterlimit:10">320</text>
+
 
 <text
-   transform="translate(153.0015,302.1489)"
    stroke-miterlimit="10"
    font-size="20"
    id="text92"
-   style="font-size:20px;font-family:sans-serif;fill:#ffffff;stroke:#ffffff;stroke-width:0.5;stroke-miterlimit:10">200</text>
+   style="font-size:20px;font-family:sans-serif;fill:#ffffff;stroke:#ffffff;stroke-width:0.5;stroke-miterlimit:10"
+   x="153.0015"
+   y="302.74915">400</text>
+
 
 <text
-   transform="translate(107.1592,256.6489)"
    stroke-miterlimit="10"
    font-size="20"
    id="text94"
-   style="font-size:20px;font-family:sans-serif;fill:#ffffff;stroke:#ffffff;stroke-width:0.5;stroke-miterlimit:10">240</text>
+   style="font-size:20px;font-family:sans-serif;fill:#ffffff;stroke:#ffffff;stroke-width:0.5;stroke-miterlimit:10"
+   x="100.55655"
+   y="259.95023">480</text>
+
 
 <text
-   transform="translate(91.4746,184.6489)"
    stroke-miterlimit="10"
    font-size="20"
    id="text96"
-   style="font-size:20px;font-family:sans-serif;fill:#ffffff;stroke:#ffffff;stroke-width:0.5;stroke-miterlimit:10">280</text>
+   style="font-size:20px;font-family:sans-serif;fill:#ffffff;stroke:#ffffff;stroke-width:0.5;stroke-miterlimit:10"
+   x="86.972794"
+   y="187.34999">560</text>
+
 
 <text
-   transform="translate(125.2837,123.6489)"
    stroke-miterlimit="10"
    font-size="20"
    id="text98"
-   style="font-size:20px;font-family:sans-serif;fill:#ffffff;stroke:#ffffff;stroke-width:0.5;stroke-miterlimit:10">320</text>
+   style="font-size:20px;font-family:sans-serif;fill:#ffffff;stroke:#ffffff;stroke-width:0.5;stroke-miterlimit:10"
+   x="121.08202"
+   y="122.74854">620</text>
+
 
 <text
    transform="matrix(1 0 0 1 175.3799 242.1895)"
@@ -504,6 +517,7 @@
    font-size="14"
    id="text100">KNOTS</text>
 
+
 <text
    transform="matrix(1 0 0 1 161.3086 165.1895)"
    fill="#FFFFFF"
@@ -514,6 +528,7 @@
    font-size="14"
    id="text102">AIR SPEED</text>
 
+
 <text
    transform="matrix(1 0 0 1 194.6592 99.6489)"
    fill="#FFFFFF"
@@ -523,5 +538,6 @@
    font-family="sans-serif"
    font-size="20"
    id="text104">0</text>
+
 
 </svg>

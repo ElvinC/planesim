@@ -25,7 +25,7 @@ export default class Scene {
             this.camera.update();
         })
 
-        // Keep tract of the pressed keys
+        // Keep track of the pressed keys
         this.keys = {}
         var _this = this;
         $(window).keydown((e) => {

@@ -27,7 +27,7 @@
 			pitch_bound:30,
 			vario_bound : 1.95,
 			airspeed_bound_l : 0,
-			airspeed_bound_h : 320
+			airspeed_bound_h : 640
 		}
 
 		// Creation of the instrument
@@ -103,7 +103,7 @@
 		function _setAirSpeed(speed){
 			if(speed > constants.airspeed_bound_h){speed = constants.airspeed_bound_h;}
 			else if(speed < constants.airspeed_bound_l){speed = constants.airspeed_bound_l;}
-			speed = 90+speed*1;
+			speed = 90+speed*0.5;
 			placeholder.each(function(){
 				$(this).find('div.instrument.airspeed div.speed').css('transform', 'rotate(' + speed + 'deg)');
 			});	

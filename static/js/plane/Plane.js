@@ -19,10 +19,6 @@ class physicalObject {
         this.momentOfInertia = 100;
     }
 
-    getPosition() {
-        return {x: this.pos.x, y: this.pos.y}
-    }
-
     addForce(force) {
         this.force.addInPlace(force);
     }
@@ -32,11 +28,10 @@ class physicalObject {
     }
 
     update(dt) {
+        // velocity verlet
         const newAcc = this.force.divide(this.mass);
         this.acc = newAcc;
-
         this.pos.addInPlace( Vector.add(this.vel.multiply(dt), newAcc.multiply(0.5 * Math.pow(dt,2))) )
-
         this.vel.addInPlace(newAcc.multiply(dt));
 
         // reset force
@@ -104,7 +99,7 @@ export default class CustomPlane {
         // thrust
         this.thrust = 0
         this.minThrust = 0;
-        this.maxThrust = 300000;
+        this.maxThrust = 400000;
 
         // flap
         this.flap = 0;
@@ -197,11 +192,12 @@ export default class CustomPlane {
 
         const velUnit = this.body.vel.unit()
         const velAngle = velUnit.angle()
+        // angle of attack
         const AoA = -Math.acos( Vector.dot(velUnit, Vector.unit(this.body.angle)) ) * Math.sign(Vector.perp(velUnit, Vector.unit(this.body.angle)))
         const altitude = -this.body.pos.y;
         
+        // atmospheric density
         const atmos = ISA(altitude)
-
         const density = atmos.density;
 
         const Cl = 1 * Math.sin(AoA + this.flap + 0.1);
@@ -209,10 +205,9 @@ export default class CustomPlane {
         const speed = this.body.vel.length()
 
         const dynPressure = 0.5 * density * speedSquared
-
-
         const liftMag = Math.min(Math.max(Cl * dynPressure * 120, -100000000), 100000000) 
-       
+
+        // lift vector
         const lift = (new Vec2(velUnit.y, -velUnit.x)).multiply(liftMag)
         this.body.addForce(lift)
 
@@ -226,7 +221,7 @@ export default class CustomPlane {
 
         if(this.settings.updateHUD){
             $("#thrust").html(Math.round(this.thrust))
-            $("#speed").html(Math.round(speed*1.944))
+            $("#speed").html(Math.round(speed)) // *1.944
             $("#vSpeed").html(Math.round(-this.body.vel.y));
             $("#density").html(Math.round(density * 1000)/1000);
             $("#altitude").html(Math.round(this.body.pos.x) + ", " + -Math.round(this.body.pos.y))
@@ -247,7 +242,8 @@ export default class CustomPlane {
 
         this.body.update(dt)
         
-        this.sprite.position = this.body.getPosition();
+        // update graphics position/rotation
+        this.sprite.position = this.body.pos;
         this.spriteImg.rotation = this.body.angle;
 
         function radToDeg(rad) {
