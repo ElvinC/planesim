@@ -125,7 +125,7 @@ input[type=range]#elevatorSlider
     overflow: hidden;
     margin: 0;
     width: 0px;
-    padding: 5px;
+    padding: 0;
     background-color: aliceblue;
     height: 100%;
     z-index: 100;
@@ -135,6 +135,10 @@ input[type=range]#elevatorSlider
 
 #options.expanded {
     width: 400px;
+}
+
+#optionsinner {
+    margin: 5px
 }
 
 .optionblock {
