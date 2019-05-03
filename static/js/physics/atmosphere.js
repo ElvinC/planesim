@@ -1,8 +1,9 @@
-
+// useful constants
 const STANDARD_GRAVITY = 9.80665
 const RSpecificAir = 287.058;
 const heatCapacityRatio = 1.4;
 
+// Layer data
 // https://en.wikipedia.org/wiki/International_Standard_Atmosphere
 const layers = [
     {
@@ -87,10 +88,19 @@ const layers = [
     },
 ];
 
+/**
+ * Convert Celsius to Kelvin
+ * @param {Number} temperature Temperature in celsius
+ */
 function celsiusToKelvin(temperature) {
     return temperature + 273.15;
 }
 
+/**
+ * Calculate temperature given atmospheric layer and altitude
+ * @param {Object} layer Atmospheric layer data
+ * @param {Number} height Altitude
+ */
 function getTemperature(layer, height) {
     const bT = celsiusToKelvin(layer.baseTemperature);
     const a = layer.lapse / 1000;
@@ -100,6 +110,11 @@ function getTemperature(layer, height) {
     return temperature;
 }
 
+/**
+ * Calculate pressure of layer with no lapse rate
+ * @param {Object} layer Atmospheric layer data
+ * @param {Number} height Altitude
+ */
 function getPressureNoLapse(layer, height) {
     // https://en.wikipedia.org/wiki/Barometric_formula
     const l = layer;
@@ -109,6 +124,11 @@ function getPressureNoLapse(layer, height) {
     return pressure;
 }
 
+/**
+ * Calculate pressure
+ * @param {Object} layer Atmospheric layer data
+ * @param {Number} temperature temperature in celsius
+ */
 function getPressure(layer, temperature) {
     const l = layer;
     const lapse = l.lapse / 1000;
@@ -122,6 +142,10 @@ function getPressure(layer, temperature) {
     return pressure;
 }
 
+/**
+ * Get atmospheric layer data
+ * @param {Number} height Altitude (m)
+ */
 function getLayer(height) {
     // find atmospheric layer
     for (let i = 1; i < layers.length; i++) {
@@ -132,10 +156,18 @@ function getLayer(height) {
     return null;
 }
 
+/**
+ * Calculate speed of sound in air
+ * @param {Number} temperature Temperature in Kelvin
+ */
 function speedOfSound(temperature) {
     return Math.sqrt(heatCapacityRatio * RSpecificAir * temperature);
 }
 
+/**
+ * Get the atmospheric data for a given altitude using ISA
+ * @param {Number} altitude altitude (m)
+ */
 export function ISA(altitude) {
     if (altitude > 86000 || altitude < -611) {
         return {

@@ -1,3 +1,6 @@
+/**
+ * A class representing a graphical vector arrow
+ */
 export default class GraphicsVector extends PIXI.Graphics {
     constructor(vec, scaling = 1, color=0xff0000) {
         super();
@@ -11,18 +14,32 @@ export default class GraphicsVector extends PIXI.Graphics {
         this.lineTo(vec.x * this.scaling, vec.y * this.scaling)
     }
 
+    /**
+     * Show the vector
+     */
     show() {
         this.show = true;
     }
 
+    /**
+     * Hide the vector
+     */
     hide() {
         this.show = false;
     }
 
+    /**
+     * Show/hide the vector
+     * @param {Boolean} setting Show vector
+     */
     setVisibility(setting) {
         this.show = setting
     }
 
+    /**
+     * Update vector values
+     * @param {Vec2} vec 2d Vector
+     */
     update(vec) {
         this.clear()
 

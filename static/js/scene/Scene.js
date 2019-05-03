@@ -1,10 +1,15 @@
 import Camera from "./Camera.js";
 
+/**
+ * A scene containing physical objects and graphics
+ */
 export default class Scene {
+    /**
+     * Create scene
+     */
     constructor() {
         // object list
         this.customPhysicalChildren = [];
-
 
         // PIXI setup
         this.renderer = new PIXI.autoDetectRenderer(1000, 500, {antialias: true});
@@ -46,18 +51,29 @@ export default class Scene {
         this.camera.addChild(this.stage)
     }
 
+    /**
+     * Add a new graphical object to scene
+     * @param {PIXI.Container} child PIXI sprite or object
+     */
     addChild(child) {
         // add graphics only
         this.stage.addChild(child);
     }
 
-
+    /**
+     * Add object with physical and graphical parameters from the custom physics engine.
+     * @param {Object} child Object with physics and graphics
+     */
     addCustomPhysicalChild(child) {
         // add physical object with graphics and physics
         this.stage.addChild(child.sprite);
         this.customPhysicalChildren.push(child)
     }
 
+    /**
+     * Update all the custom physical children contained in the scene
+     * @param {Number} dt Timestep
+     */
     update(dt) {
         // update physics
         for (var body in this.customPhysicalChildren) {
@@ -66,6 +82,9 @@ export default class Scene {
 
     }
 
+    /**
+     * Render the scene using the current camera
+     */
     render() {
         this.renderer.render(this.camera);
     }

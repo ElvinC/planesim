@@ -1,39 +1,40 @@
 import Scene from './scene/Scene.js'
 import CustomPlane from './plane/Plane.js';
-import { mixColor } from './scene/Color.js';
+import {mixColor} from './scene/Color.js';
 
-
+// global variables
 var scene;
-
 var instruments;
 
-
+// start when loaded
 $(document).ready(() => {
     scene = new Scene();
     setup()
 })
 
-
 let last_time = 0;
 
+/**
+ * Set up game
+ */
 function setup() {
     // Flight instruments setup
     var options = {
         width: "18%",
         height: 200,
-        size : 200,				// Sets the size in pixels of the indicator (square)
-        roll : 0,				// Roll angle in degrees for an attitude indicator
-        pitch : 400,				// Pitch angle in degrees for an attitude indicator
-        heading: 0,				// Heading angle in degrees for an heading indicator
-        vario: 0,				// Variometer in 1000 feets/min for the variometer indicator
-        airspeed: 0,			// Air speed in knots for an air speed indicator
-        altitude: 0,			// Altitude in feets for an altimeter indicator
-        pressure: 1000,			// Pressure in hPa for an altimeter indicator
-        showBox : false,			// Sets if the outer squared box is visible or not (true or false)
-        img_directory : '../static/assets/instruments/'	// The directory where the images are saved to
+        size : 200,
+        roll : 0,
+        pitch : 400,
+        heading: 0,
+        vario: 0,
+        airspeed: 0,
+        altitude: 0,
+        pressure: 1000,
+        showBox : false,
+        img_directory : '../static/assets/instruments/'
     }
 
-    // dict of instruments
+    // "dict" of instruments
     instruments = {
         attitude: $.flightIndicator('#attitude', 'attitude', options),
         heading: $.flightIndicator('#heading', 'heading', options),
@@ -249,10 +250,12 @@ function setup() {
     last_time = performance.now()
     render()
 }
+
 let counterthing = 1
 
-
-// render loop
+/**
+ * Render loop
+ */
 function render() {
     // calculate time difference
     let now = performance.now()

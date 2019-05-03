@@ -2,8 +2,16 @@ import { Vec2, Vector } from "./Vec2.js";
 import GraphicsVector from "../scene/GraphicsVector.js";
 import { ISA } from "../physics/atmosphere.js";
 
-
+/**
+ * A physical object with position, mass, and rotation.
+ */
 class physicalObject {
+    /**
+     * 
+     * @param {Number} x The x value (m)
+     * @param {Number} y The y value (m)
+     * @param {Number} mass The mass (kg)
+     */
     constructor(x, y, mass) {
         this.pos = new Vec2(x, y);
         this.mass = mass;
@@ -19,20 +27,33 @@ class physicalObject {
         this.momentOfInertia = 100;
     }
 
+    /**
+     * Add a force for next update
+     * @param {Number} force The force to add in Newton
+     */
     addForce(force) {
         this.force.addInPlace(force);
     }
 
+    /**
+     * Add a torque for next update
+     * @param {Number} torque The torque in Nm
+     */
     addTorque(torque) {
         this.torque += torque
     }
 
+    /**
+     * Update next timestep
+     * @param {Number} dt Timestep
+     */
     update(dt) {
         // velocity verlet
         const newAcc = this.force.divide(this.mass);
+        this.pos.addInPlace( Vector.add(this.vel.multiply(dt), this.acc.multiply(0.5 * Math.pow(dt,2))) )
+        this.vel.addInPlace(Vector.add(this.acc, newAcc).multiply(0.5 * dt));
+        
         this.acc = newAcc;
-        this.pos.addInPlace( Vector.add(this.vel.multiply(dt), newAcc.multiply(0.5 * Math.pow(dt,2))) )
-        this.vel.addInPlace(newAcc.multiply(dt));
 
         // reset force
         this.force.x = 0;
@@ -50,7 +71,17 @@ class physicalObject {
 
 }
 
+/**
+ * An interactive plane with custom parameters
+ */
 export default class CustomPlane {
+    /**
+     * 
+     * @param {Number} x The x value (m)
+     * @param {Number} y The y value (m)
+     * @param {Object} keys An updating object with the currently pressed keys keys. (key=keycode, val=bool)
+     * @param {Object} instruments An object containing the flightIndicator instruments.
+     */
     constructor(x, y, keys, instruments) {
         // var texture = PIXI.Texture.fromImage('static/assets/sprites/A220.png');
         var texture = PIXI.Texture.fromImage('../static/assets/sprites/A220.png')
@@ -113,10 +144,18 @@ export default class CustomPlane {
         }
     }
 
+    /**
+     * Get the thrust fraction (thrust/max thrust)
+     * @returns {Number}
+     */
     getThrustFraction() {
         return this.thrust / this.maxThrust
     }
 
+    /**
+     * Update physical parameters after timestep
+     * @param {Number} dt The timestep
+     */
     update(dt) {
         if (this.keys[38]) {
             this.thrust += this.maxThrust / 100;
@@ -271,6 +310,10 @@ export default class CustomPlane {
         
     }
 
+    /**
+     * Show or hide the force/velocity vectors
+     * @param {Boolean} setting Show the vector
+     */
     showVector(setting) {
         for (var i = 0; i < this.vectorList.length; i++) {
             this.vectorList[i].setVisibility(setting)
