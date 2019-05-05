@@ -8,7 +8,6 @@ var instruments;
 
 // start when loaded
 $(document).ready(() => {
-    scene = new Scene();
     setup()
 })
 
@@ -18,6 +17,8 @@ let last_time = 0;
  * Set up game
  */
 function setup() {
+    scene = new Scene();
+
     // Flight instruments setup
     var options = {
         width: "18%",
@@ -281,6 +282,5 @@ function render() {
     var newBGColor = mixColor([135, 206, 235], [0, 0, 3], Math.min(-plane.sprite.position.y / 30000, 1))
     scene.renderer.backgroundColor =  PIXI.utils.rgb2hex(newBGColor)
     
-    //console.log(emitter.frequency)
     requestAnimationFrame(render);
 }

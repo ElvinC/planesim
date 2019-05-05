@@ -166,14 +166,12 @@ export default class CustomPlane {
             this.thrust = Math.max(Math.min(this.thrust, this.maxThrust), this.minThrust)
         }
         if (this.keys[37]) {
-            // this.body.addTorque(-10)
             this.flap += this.maxFlap / 30;
             this.flap = Math.max(Math.min(this.flap, this.maxFlap), this.minFlap)
         }
         if (this.keys[39]) {
             this.flap -= this.maxFlap / 30;
             this.flap = Math.max(Math.min(this.flap, this.maxFlap), this.minFlap)
-            // this.body.addTorque(10)
         }
         
         $("#thrustSlider").val(this.thrust / this.maxThrust)
